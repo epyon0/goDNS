@@ -1,0 +1,5 @@
+[A]
+"google.com" = "127.0.0.1"
+
+[CNAME]
+"yahoo.com" = "google.com"
