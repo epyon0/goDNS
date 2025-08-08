@@ -69,8 +69,7 @@ func main() {
 		utils.Debug(fmt.Sprintf("Binary Data: \n{\n%s\n}", utils.WalkByteSlice(data)), *debug)
 
 		// parse data
-		if data[2]&0x80 == 0 {
-			// query
+		if data[2]&0x78 == 0 || data[2]&0x78 == 1 { // QUERY or IQUERY
 			var packet dnsPacket
 			packet.data.ID = (uint16(data[0]) << 8) + uint16(data[1])
 			packet.data.FLAGS = (uint16(data[2]) << 8) + uint16(data[3])
@@ -86,11 +85,11 @@ func main() {
 				length := int(data[i])
 				i += length
 			}
-		}
 
-		// send response
-		utils.Debug("Sending response", *debug)
-		_, err = conn.WriteToUDP(data, addr)
-		utils.Er(err)
+			// send response
+			utils.Debug("Sending response", *debug)
+			_, err = conn.WriteToUDP(data, addr)
+			utils.Er(err)
+		}
 	}
 }
