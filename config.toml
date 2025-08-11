@@ -1,5 +1,18 @@
 [A]
 "google.com" = "127.0.0.1"
 
+[NS]
+"dns.google.com"
+
 [CNAME]
 "yahoo.com" = "google.com"
+
+[SOA]
+
+[PTR]
+
+[MX]
+10 = "mail.google.com"
+
+[TXT]
+"google.com" = "txt string"
