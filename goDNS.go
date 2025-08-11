@@ -65,11 +65,19 @@ func main() {
 		data := buf[:n]
 
 		utils.Debug(fmt.Sprintf("Read %d bytes from %d.%d.%d.%d:%d", n, addr.IP[0], addr.IP[1], addr.IP[2], addr.IP[3], addr.Port), *debug)
-		utils.Debug(fmt.Sprintf("String Data: \n{\n%s\n}", string(data)), *debug)
-		utils.Debug(fmt.Sprintf("Binary Data: \n{\n%s\n}", utils.WalkByteSlice(data)), *debug)
+		utils.Debug(fmt.Sprintf("String Data:\n{\n%s\n}", string(data)), *debug)
+		utils.Debug(fmt.Sprintf("Hex Data:\n{\n%s\n}", utils.WalkByteSlice(data)), *debug)
+		utils.Debug(fmt.Sprintf("Binary Data:\n{\n%s\n}", utils.DumpByteSlice(data)), *debug)
 
 		// parse data
 		if data[2]&0x78 == 0 || data[2]&0x78 == 1 { // QUERY or IQUERY
+			if data[2]&0x78 == 0 {
+				utils.Debug("QUERY", *debug)
+			}
+			if data[2]&0x78 == 1 {
+				utils.Debug("IQUERY", *debug)
+			}
+
 			var packet dnsPacket
 			packet.data.ID = (uint16(data[0]) << 8) + uint16(data[1])
 			packet.data.FLAGS = (uint16(data[2]) << 8) + uint16(data[3])
@@ -86,10 +94,43 @@ func main() {
 				i += length
 			}
 
+			// Populate RR here
+
 			// send response
+
+			var reply []byte
+
+			reply = append(reply, byte(packet.data.ID>>8), byte(packet.data.ID))
+			flagByte := packet.data.FLAGS & 0x7800
+			flagByte += 0x8000 //QR - Response
+			flagByte += 0x400  // AA
+			reply = append(reply, byte(flagByte>>8), byte(flagByte))
+			reply = append(reply, byte(packet.data.QDCOUNT>>8), byte(packet.data.QDCOUNT))
+			reply = append(reply, byte(packet.data.ANCOUNT>>8), byte(packet.data.ANCOUNT))
+			reply = append(reply, byte(packet.data.NSCOUNT>>8), byte(packet.data.NSCOUNT))
+			reply = append(reply, byte(packet.data.ARCOUNT>>8), byte(packet.data.ARCOUNT))
+
+			// fill in RR first
+			for i := 0; i < len(packet.rr.NAME); i++ {
+				reply = append(reply, packet.rr.NAME[i])
+			}
+			reply = append(reply, byte(packet.rr.TYPE>>8), byte(packet.rr.TYPE))
+			reply = append(reply, byte(packet.rr.CLASS>>8), byte(packet.rr.CLASS))
+			reply = append(reply, byte(packet.rr.TTL>>24), byte(packet.rr.TTL>>16), byte(packet.rr.TTL>>8), byte(packet.rr.TTL))
+			reply = append(reply, byte(packet.rr.RDLENGTH>>8), byte(packet.rr.RDLENGTH))
+			for i := 0; i < len(packet.rr.RDATA); i++ {
+				reply = append(reply, byte(packet.rr.RDATA[i]))
+			}
+
+			for i := 0; i < len(packet.q.QNAME); i++ {
+				reply = append(reply, packet.q.QNAME[i])
+			}
+			reply = append(reply, byte(packet.q.QTYPE>>8), byte(packet.q.QTYPE))
+			reply = append(reply, byte(packet.q.QCLASS>>8), byte(packet.q.QCLASS))
+
 			utils.Debug("Sending response", *debug)
-			_, err = conn.WriteToUDP(data, addr)
-			utils.Er(err)
+			//_, err = conn.WriteToUDP(data, addr)
+			//utils.Er(err)
 		}
 	}
 }

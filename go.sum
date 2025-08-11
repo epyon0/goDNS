@@ -1,2 +1,6 @@
 github.com/epyon0/goUtils v0.0.0-20250801181413-03e5df035fe1 h1:7LYmt6hZjF82/KekkkuaXi3Xi11ualyz+4Pqsb2OijU=
 github.com/epyon0/goUtils v0.0.0-20250801181413-03e5df035fe1/go.mod h1:RCsjQghzHAszArfLZAVSFz5ODUIth89v81aIGzEM1sQ=
+github.com/epyon0/goUtils v0.0.0-20250811151041-e2b35bc27b8a h1:eKiLVOE/SkpUVAIi7vN6nojrWk5jH5tj7HeVTAMlUWQ=
+github.com/epyon0/goUtils v0.0.0-20250811151041-e2b35bc27b8a/go.mod h1:RCsjQghzHAszArfLZAVSFz5ODUIth89v81aIGzEM1sQ=
+github.com/epyon0/goUtils v0.0.0-20250811152209-84cd4dd25348 h1:3MkMrh7GG62Z61+vv7IvCnTcSxJcoIm/Af4Oa4HjePI=
+github.com/epyon0/goUtils v0.0.0-20250811152209-84cd4dd25348/go.mod h1:RCsjQghzHAszArfLZAVSFz5ODUIth89v81aIGzEM1sQ=
