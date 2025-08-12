@@ -1,18 +1,19 @@
+TTL = 300 # Default TTL for all RRs
+
 [A]
 "google.com" = "127.0.0.1"
 
 [NS]
-"dns.google.com"
+"google.com" = "dns.google.com"
 
 [CNAME]
 "yahoo.com" = "google.com"
 
-[SOA]
-
 [PTR]
+"8.8.8.8" = "apple.com"
 
 [MX]
-10 = "mail.google.com"
+"google.com" = "mail.yahoo.com"
 
 [TXT]
-"google.com" = "txt string"
+"txt.google.com" = "txt string"

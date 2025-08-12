@@ -95,6 +95,20 @@ func main() {
 			}
 
 			// Populate RR here
+			switch packet.q.QTYPE {
+			case 1: // A
+
+			case 2: // NS
+
+			case 5: // CNAME
+
+			case 12: // PTR
+
+			case 15: // MX
+
+			case 16: // TXT
+
+			}
 
 			// send response
 
