@@ -54,7 +54,7 @@ func main() {
 	utils.Debug("Creating connection", *debug)
 	conn, err := net.ListenUDP("udp4", sock)
 	utils.Er(err)
-	defer conn.Close()
+	conn.Close()
 
 	buf := make([]byte, 4096)
 
@@ -97,6 +97,7 @@ func main() {
 			// Populate RR here
 			switch packet.q.QTYPE {
 			case 1: // A
+			// look though config for A record that matches packet.q.QNAME
 
 			case 2: // NS
 
@@ -133,7 +134,7 @@ func main() {
 			reply = append(reply, byte(packet.rr.TTL>>24), byte(packet.rr.TTL>>16), byte(packet.rr.TTL>>8), byte(packet.rr.TTL))
 			reply = append(reply, byte(packet.rr.RDLENGTH>>8), byte(packet.rr.RDLENGTH))
 			for i := 0; i < len(packet.rr.RDATA); i++ {
-				reply = append(reply, byte(packet.rr.RDATA[i]))
+				reply = append(reply, packet.rr.RDATA[i])
 			}
 
 			for i := 0; i < len(packet.q.QNAME); i++ {
