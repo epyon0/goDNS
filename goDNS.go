@@ -3,13 +3,19 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
+	"io/ioutil"
 	"net"
+	"os"
+	"path/filepath"
 
 	utils "github.com/epyon0/goUtils"
+	toml "github.com/pelletier/go-toml"
 )
 
 var debug *bool
 var port *uint
+var config *string
 
 type dnsPacket struct {
 	data dnsData
@@ -41,11 +47,34 @@ type question struct {
 	QCLASS uint16
 }
 
+type tomlConfig struct {
+	ttl   uint16
+	a     [][2]string
+	ns    [][2]string
+	cname [][2]string
+	ptr   [][2]string
+	mx    [][2]string
+	txt   [][2]string
+}
+
 func main() {
+	filePath, err := os.Executable()
+	utils.Er(err)
+
 	debug = flag.Bool("v", false, "Enable verbose output")
-	port = flag.Uint("p", 53, "Define UDP port to use")
+	port = flag.Uint("p", 53, "Define alternate UDP port")
+	config = flag.String("c", fmt.Sprintf("%s/config.toml", filepath.Dir(filePath)), "Define alternate configuration file")
 	flag.Parse()
 	*port = uint(uint16(*port))
+
+	file, err := os.Open(*config)
+	utils.Er(err)
+	defer file.Close()
+
+	configBytes, err := io.ReadAll(file)
+	utils.Er(err)
+
+	toml.LoadBytes(configBytes)
 
 	utils.Debug(fmt.Sprintf("Creating socket [0.0.0.0:%d]", *port), *debug)
 	sock, err := net.ResolveUDPAddr("udp4", fmt.Sprintf("0.0.0.0:%d", *port))

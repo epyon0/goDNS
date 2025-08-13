@@ -4,3 +4,5 @@ github.com/epyon0/goUtils v0.0.0-20250811151041-e2b35bc27b8a h1:eKiLVOE/SkpUVAIi
 github.com/epyon0/goUtils v0.0.0-20250811151041-e2b35bc27b8a/go.mod h1:RCsjQghzHAszArfLZAVSFz5ODUIth89v81aIGzEM1sQ=
 github.com/epyon0/goUtils v0.0.0-20250811152209-84cd4dd25348 h1:3MkMrh7GG62Z61+vv7IvCnTcSxJcoIm/Af4Oa4HjePI=
 github.com/epyon0/goUtils v0.0.0-20250811152209-84cd4dd25348/go.mod h1:RCsjQghzHAszArfLZAVSFz5ODUIth89v81aIGzEM1sQ=
+github.com/pelletier/go-toml v1.9.5 h1:4yBQzkHv+7BHq2PQUZF3Mx0IYxG7LsP222s7Agd3ve8=
+github.com/pelletier/go-toml v1.9.5/go.mod h1:u1nR/EPcESfeI/szUZKdtJ0xRNbUoANCkoOuaOx1Y+c=
